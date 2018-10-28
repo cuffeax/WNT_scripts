@@ -12,7 +12,7 @@ Script providing a proper way of cleaning Windows. More info here: https://guide
 Rebuilds WMI repository by purging it and recreating it again. **WARNING: don't use unless you know what you're doing!**
 
 #### SFClog
-Initiates a System File Checkes scan and creates a log of found errors for review. Usually used when remotely helping someone with system corruption.
+Initiates a System File Checker scan and creates a log of found errors for review. Usually used when remotely helping someone with system corruption.
 
 #### DISMResetBase
 Cleans WinSxS folder and resets OS base by executing a simple command.

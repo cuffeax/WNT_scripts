@@ -35,26 +35,26 @@ echo =========================================
 echo ** SafeSVC
 echo =========================================
 echo.
-echo Tento skript provede zakladni (nejen) bezpecnostni optimalizaci OS.
+echo This script performs basic (not just) securitywise OS optimization.
 echo.
-echo * Ukoncete prosim vsechny aplikace.
+echo * Please close all your applications.
 echo.
 echo off
 pause
 cls
 
 echo --------------------------------------------------------------------------------
-echo ** Zvolte prosim verzi OS.
+echo ** Please choose the OS version.
 echo --------------------------------------------------------------------------------
 echo.
 echo [1] Windows 10
 echo [2] Windows 8.1
-echo [3] Windows 7 (doporuceni: prejdete na novejsi OS)
+echo [3] Windows 7 (advice: migrate to a newer OS)
 echo.
-echo * Vyberte z moznosti a stisknete Enter.
+echo * Pick from the options and press Enter.
 echo.
 echo off
-set /p op=Zvolte (1/2/3):
+set /p op=Choose (1/2/3):
 if %op%==1 goto master
 if %op%==2 goto elderwnt
 if %op%==3 goto legacy
@@ -66,7 +66,7 @@ goto error
 
 :master
 cls
-echo Optimalizuji sluzby Windows...
+echo Optimizing Windows services...
 echo off
 net stop WMPNetworkSvc
 net stop Dnscache
@@ -116,7 +116,7 @@ sc config shpamsvc start= disabled
 :: sc config WSearch start= demand
 cls
 
-echo Optimalizuji funkce Windows...
+echo Optimizing Windows features...
 echo off
 dism /online /Disable-Feature /FeatureName:FaxServicesClientPackage /quiet /norestart
 dism /online /disable-feature /FeatureName:SMB1Protocol /quiet /norestart
@@ -134,7 +134,7 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v Hiberbo
 reg add "HKLM\SOFTWARE\Policies\Microsoft\MRT" /v DontOfferThroughWUAU /t REG_DWORD /d 1 /f
 cls
 
-echo Optimalizuji telemetrii...
+echo Optimizing telemetry...
 echo off
 reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v "Enabled" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata" /v PreventDeviceMetadataFromNetwork /t REG_DWORD /d 1 /f
@@ -148,7 +148,7 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\AutoLogger\SQMLogger" /v "Sta
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-Application-Experience/Program-Telemetry" /v "Enabled" /t REG_DWORD /d 0 /f
 cls
 
-echo Optimalizuji ulohy Windows...
+echo Optimizing Windows tasks...
 echo off
 schtasks /Change /TN "Microsoft\Windows\Autochk\Proxy" /Disable
 schtasks /Change /TN "Microsoft\Windows\NetTrace\GatherNetworkInfo" /disable
@@ -162,24 +162,24 @@ schtasks /Change /TN "Microsoft\Windows\PI\Sqm-Tasks" /Disable
 cls
 
 echo --------------------------------------------------------------------------------
-echo ** Chcete zakazat Usnadneni pristupu?
+echo ** Would you like to disable Ease of Use?
 echo --------------------------------------------------------------------------------
 echo.
-echo * Bude zakazano spusteni na prihlasovaci obrazovce.
+echo * Its execution on the logon screen will be disabled.
 echo.
-echo * Budou zakazany klavesove zkratky jako 5x Shift apod.
+echo * Keyboard shortcuts such as 5x Shift etc. will no longer work.
 echo.
-echo [1] Ano
-echo [2] Ne
+echo [1] Yes
+echo [2] No
 echo off
-set /p op=Zvolte (1/2):
+set /p op=Choose (1/2):
 if %op%==1 goto master_eou
 if %op%==2 goto master_end
 goto error
 
 :master_eou
 cls
-echo Vypinam Usnadneni pristupu...
+echo Turning off the Ease of Use...
 echo off
 reg add "HKCU\Control Panel\Accessibility\StickyKeys" /v "Flags" /t REG_SZ /d "506" /f
 reg add "HKCU\Control Panel\Accessibility\Keyboard Response" /v "Flags" /t REG_SZ /d "122" /f
@@ -187,17 +187,17 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution 
 cls
 
 :master_end
-echo Finalni upravy...
+echo Final tweaks...
 echo off
-:: Zakazuje podporu 16-bit aplikaci
+:: Turns off 16-bit app support
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "VDMDisallowed" /t REG_DWORD /d 1 /f
 netsh firewall set icmpsetting type= All mode= Disable
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender\MpEngine" /v "MpEnablePus" /t REG_DWORD /d 1 /f
 bitsadmin /reset /allusers
 cls
-echo Hotovo!
+echo Done & done!
 echo.
-echo * Je potreba restartovat OS... Muzeme?
+echo * A reboot is required... Shall we?
 echo.
 echo off
 pause
@@ -210,7 +210,7 @@ exit /b
 
 :elderwnt
 cls
-echo Optimalizuji sluzby Windows...
+echo Optimizing Windows services...
 echo off
 net stop WMPNetworkSvc
 net stop Dnscache
@@ -235,7 +235,7 @@ sc config Fax start= disabled
 :: sc config WSearch start= demand
 cls
 
-echo Optimalizuji funkce Windows...
+echo Optimizing Windows features...
 echo off
 dism /online /Disable-Feature /FeatureName:FaxServicesClientPackage /quiet /norestart
 dism /online /disable-feature /FeatureName:SMB1Protocol /quiet /norestart
@@ -249,7 +249,7 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v Hiberbo
 reg add "HKLM\SOFTWARE\Policies\Microsoft\MRT" /v DontOfferThroughWUAU /t REG_DWORD /d 1 /f
 cls
 
-echo Optimalizuji telemetrii...
+echo Optimizing telemetry...
 echo off
 reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v "Enabled" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata" /v PreventDeviceMetadataFromNetwork /t REG_DWORD /d 1 /f
@@ -260,7 +260,7 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "DisableUAR" /t 
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\AutoLogger\AutoLogger-Diagtrack-Listener" /v "Start" /t REG_DWORD /d 0 /f
 cls
 
-echo Optimalizuji ulohy Windows...
+echo Optimizing Windows tasks...
 echo off
 schtasks /Change /TN "Microsoft\Windows\Autochk\Proxy" /Disable
 schtasks /Change /TN "Microsoft\Windows\NetTrace\GatherNetworkInfo" /disable
@@ -274,24 +274,24 @@ schtasks /Change /TN "Microsoft\Windows\PI\Sqm-Tasks" /Disable
 cls
 
 echo --------------------------------------------------------------------------------
-echo ** Chcete zakazat Usnadneni pristupu?
+echo ** Would you like to disable Ease of Use?
 echo --------------------------------------------------------------------------------
 echo.
-echo * Bude zakazano spusteni na prihlasovaci obrazovce.
+echo * Its execution on the logon screen will be disabled.
 echo.
-echo * Budou zakazany klavesove zkratky jako 5x Shift apod.
+echo * Keyboard shortcuts such as 5x Shift etc. will no longer work.
 echo.
-echo [1] Ano
-echo [2] Ne
+echo [1] Yes
+echo [2] No
 echo off
-set /p op=Zvolte (1/2):
-if %op%==1 goto elderwnt_eou
-if %op%==2 goto elderwnt_end
+set /p op=Choose (1/2):
+if %op%==1 goto master_eou
+if %op%==2 goto master_end
 goto error
 
 :elderwnt_eou
 cls
-echo Vypinam Usnadneni pristupu...
+echo Turning off the Ease of Use...
 echo off
 reg add "HKCU\Control Panel\Accessibility\StickyKeys" /v "Flags" /t REG_SZ /d "506" /f
 reg add "HKCU\Control Panel\Accessibility\Keyboard Response" /v "Flags" /t REG_SZ /d "122" /f
@@ -299,17 +299,17 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution 
 cls
 
 :elderwnt_end
-echo Finalni upravy...
+echo Final tweaks...
 echo off
-:: Zakazuje podporu 16-bit aplikaci
+:: Turns off 16-bit app support
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "VDMDisallowed" /t REG_DWORD /d 1 /f
 netsh firewall set icmpsetting type= All mode= Disable
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender\MpEngine" /v "MpEnablePus" /t REG_DWORD /d 1 /f
 bitsadmin /reset /allusers
 cls
-echo Hotovo!
+echo Done & done!
 echo.
-echo * Je potreba restartovat OS... Muzeme?
+echo * A reboot is required... Shall we?
 echo.
 echo off
 pause
@@ -322,7 +322,7 @@ exit /b
 
 :legacy
 cls
-echo Zastavuji a vypinam nebezpecne sluzby...
+echo Optimizing Windows services...
 echo off
 net stop WMPNetworkSvc
 net stop Dnscache
@@ -349,7 +349,7 @@ sc config Fax start= disabled
 :: sc config WSearch start= demand
 cls
 
-echo Optimalizuji funkce Windows...
+echo Optimizing Windows features...
 echo off
 dism /online /Disable-Feature /FeatureName:WindowsGadgetPlatform /quiet /norestart
 dism /online /Disable-Feature /FeatureName:TabletPCOC /quiet /norestart
@@ -362,7 +362,7 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management
 reg add "HKLM\SOFTWARE\Policies\Microsoft\MRT" /v DontOfferThroughWUAU /t REG_DWORD /d 1 /f
 cls
 
-echo Optimalizuji telemetrii...
+echo Optimizing telemetry...
 echo off
 reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v "Enabled" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata" /v PreventDeviceMetadataFromNetwork /t REG_DWORD /d 1 /f
@@ -373,7 +373,7 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "DisableUAR" /t 
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\AutoLogger\AutoLogger-Diagtrack-Listener" /v "Start" /t REG_DWORD /d 0 /f
 cls
 
-echo Optimalizuji ulohy Windows...
+echo Optimizing Windows tasks...
 echo off
 schtasks /Change /TN "Microsoft\Windows\Autochk\Proxy" /Disable
 schtasks /Change /TN "Microsoft\Windows\NetTrace\GatherNetworkInfo" /disable
@@ -387,24 +387,24 @@ schtasks /Change /TN "Microsoft\Windows\PI\Sqm-Tasks" /Disable
 cls
 
 echo --------------------------------------------------------------------------------
-echo ** Chcete zakazat Usnadneni pristupu?
+echo ** Would you like to disable Ease of Use?
 echo --------------------------------------------------------------------------------
 echo.
-echo * Bude zakazano spusteni na prihlasovaci obrazovce.
+echo * Its execution on the logon screen will be disabled.
 echo.
-echo * Budou zakazany klavesove zkratky jako 5x Shift apod.
+echo * Keyboard shortcuts such as 5x Shift etc. will no longer work.
 echo.
-echo [1] Ano
-echo [2] Ne
+echo [1] Yes
+echo [2] No
 echo off
-set /p op=Zvolte (1/2):
-if %op%==1 goto legacy_eou
-if %op%==2 goto legacy_end
+set /p op=Choose (1/2):
+if %op%==1 goto master_eou
+if %op%==2 goto master_end
 goto error
 
 :legacy_eou
 cls
-echo Vypinam Usnadneni pristupu...
+echo Turning off the Ease of Use...
 echo off
 reg add "HKCU\Control Panel\Accessibility\StickyKeys" /v "Flags" /t REG_SZ /d "506" /f
 reg add "HKCU\Control Panel\Accessibility\Keyboard Response" /v "Flags" /t REG_SZ /d "122" /f
@@ -412,17 +412,17 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution 
 cls
 
 :legacy_end
-echo Finalni upravy...
+echo Final tweaks...
 echo off
-:: Zakazuje podporu 16-bit aplikaci
+:: Turns off 16-bit app support
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "VDMDisallowed" /t REG_DWORD /d 1 /f
 netsh firewall set icmpsetting type= All mode= Disable
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender\MpEngine" /v "MpEnablePus" /t REG_DWORD /d 1 /f
 bitsadmin /reset /allusers
 cls
-echo Hotovo!
+echo Done & done!
 echo.
-echo * Je potreba restartovat OS... Muzeme?
+echo * A reboot is required... Shall we?
 echo.
 echo off
 pause
