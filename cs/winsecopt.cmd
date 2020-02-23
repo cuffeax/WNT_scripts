@@ -2,8 +2,9 @@
 :: 2015-2020 mople71
 :: Licensed under The Unlicense | https://unlicense.org/UNLICENSE
 title WinSecOpt by mople71
-cls
 color 1F
+cls
+
 
 echo =========================================
 echo # WinSecOpt (drive SafeSVC)
@@ -12,7 +13,7 @@ echo.
 echo Tento skript provede zakladni (nejen) bezpecnostni optimalizaci OS.
 echo.
 echo * Ukoncete prosim vsechny aplikace.
-echo.
+echo. && echo.
 echo off
 pause
 cls
@@ -40,7 +41,7 @@ goto error
 :master
 cls
 echo TASK [W10 : Optimalizuji sluzby]
-echo -----------------------------------
+echo ----------------------------------------------
 echo off
 net stop WMPNetworkSvc
 net stop Dnscache
@@ -97,7 +98,7 @@ sc config shpamsvc start= disabled
 cls
 
 echo TASK [W10 : Optimalizuji konfiguraci]
-echo ----------------------------------------
+echo ----------------------------------------------
 echo off
 :: Nepotrebne funkce
 reg add "HKLM\SOFTWARE\Microsoft\PolicyManager\default\WiFi\AllowWiFiHotSpotReporting" /v "Value" /t REG_DWORD /d 0 /f
@@ -120,7 +121,7 @@ PowerShell -Command "Set-MpPreference -SubmitSamplesConsent 1"
 :common
 cls
 echo TASK [WNT : Optimalizuji funkce Windows]
-echo -------------------------------------------
+echo ----------------------------------------------
 echo off
 dism /online /Disable-Feature /FeatureName:FaxServicesClientPackage /norestart
 dism /online /disable-feature /FeatureName:SMB1Protocol /norestart
@@ -134,7 +135,7 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v Hiberbo
 cls
 
 echo TASK [WNT : Optimalizuji ulohy Windows]
-echo ------------------------------------------
+echo ----------------------------------------------
 echo off
 schtasks /Change /TN "Microsoft\Windows\Autochk\Proxy" /Disable
 schtasks /Change /TN "Microsoft\Windows\NetTrace\GatherNetworkInfo" /disable
@@ -185,7 +186,7 @@ goto error
 :eou
 cls
 echo TASK [WNT : Vypinam Usnadneni pristupu]
-echo ------------------------------------------
+echo ----------------------------------------------
 echo off
 reg add "HKCU\Control Panel\Accessibility\StickyKeys" /v "Flags" /t REG_SZ /d "506" /f
 reg add "HKCU\Control Panel\Accessibility\Keyboard Response" /v "Flags" /t REG_SZ /d "122" /f
@@ -198,7 +199,7 @@ cls
 echo Hotovo!
 echo.
 echo * Je potreba restartovat OS... Muzeme?
-echo.
+echo. && echo.
 echo off
 pause
 shutdown /r
@@ -212,7 +213,7 @@ exit /b
 :legacy
 cls
 echo TASK [W8.1 : Optimalizuji sluzby]
-echo ------------------------------------
+echo ----------------------------------------------
 echo off
 net stop WMPNetworkSvc
 net stop Dnscache
@@ -239,7 +240,7 @@ sc config Fax start= disabled
 cls
 
 echo TASK [W8.1 : Optimalizuji konfiguraci]
-echo -----------------------------------------
+echo ----------------------------------------------
 echo off
 :: Nastaveni Windows Defender
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender\MpEngine" /v "MpEnablePus" /t REG_DWORD /d 1 /f

@@ -1,29 +1,30 @@
 @echo off
-:: 2015-2019 mople71
+:: 2015-2020 mople71
 :: Licensed under The Unlicense | https://unlicense.org/UNLICENSE
 title SFClog by mople71
-cls
 color 1F
+cls
 
-echo * Vyvolavam System File Checker sken...
-echo.
+
+echo TASK [SFClog : Vyvolavam System File Checker sken]
+echo -----------------------------------------------------
 echo off
 sfc /scannow
-cls
+echo. && echo.
 
-echo Sken dokoncen.
-echo.
-echo * Generuji log...
-echo.
+echo TASK [SFClog : Generuji log]
+echo -----------------------------------------------------
 echo off
 findstr /c:"[SR]" %systemroot%\Logs\CBS\CBS.log>%TEMP%\sfclog.txt
 findstr /c:"Error" %systemroot%\Logs\CBS\CBS.log>>%TEMP%\sfclog.txt
 echo.
-echo Log vytvoren.
+echo # Log vytvoren. Stisknete libovolnou klavesu pro otevreni.
 echo.
 echo * Prosim zkopirujte jeho obsah do vaseho tematu.
 echo.
 echo off
-notepad.exe %TEMP%\sfclog.txt
 pause
+notepad %TEMP%\sfclog.txt
+
+
 exit /b

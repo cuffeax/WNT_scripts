@@ -1,29 +1,30 @@
 @echo off
-:: 2015-2019 mople71
+:: 2015-2020 mople71
 :: Licensed under The Unlicense | https://unlicense.org/UNLICENSE
 title SFClog by mople71
-cls
 color 1F
+cls
 
-echo * Initiating System File Checker scan...
-echo.
+
+echo TASK [SFClog : Initiate System File Checker scan]
+echo ----------------------------------------------------
 echo off
 sfc /scannow
-cls
+echo. && echo.
 
-echo Scan complete.
-echo.
-echo * Creating a log...
-echo.
+echo TASK [SFClog : Generate a log]
+echo ----------------------------------------------------
 echo off
 findstr /c:"[SR]" %systemroot%\Logs\CBS\CBS.log>%TEMP%\sfclog.txt
 findstr /c:"Error" %systemroot%\Logs\CBS\CBS.log>>%TEMP%\sfclog.txt
 echo.
-echo The log has been created.
+echo # Log has been created. Press any key to open.
 echo.
 echo * Please copy its content into your thread.
 echo.
 echo off
-notepad.exe %TEMP%\sfclog.txt
 pause
+notepad %TEMP%\sfclog.txt
+
+
 exit /b

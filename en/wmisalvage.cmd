@@ -1,36 +1,50 @@
 @echo off
-:: 2015-2019 mople71
+:: 2015-2020 mople71
 :: Licensed under The Unlicense | https://unlicense.org/UNLICENSE
-title WMI Repository Rebase
+title WMI Repository Rebase by mople71
 color 1F
 pause
 cls
 
-echo Stopping necessary services...
+
+echo TASK [WMISalvage : Stop necessary services]
+echo --------------------------------------------------------
 echo off
 net stop vmms
 net stop iphlpsvc
 net stop winmgmt
+echo. && echo.
+
+echo TASK [WMISalvage : Verify winmgmt stopped]
+echo --------------------------------------------------------
+echo off
 sc query winmgmt
 pause
-cls
+echo. && echo.
 
-echo Purging WMI repository...
+echo TASK [WMISalvage : Purge WMI repository]
+echo --------------------------------------------------------
 echo off
 del /f /q %systemroot%\System32\wbem\Repository\*.*
-pause
-cls
+echo. && echo.
 
-echo Starting previously stopped services...
+echo TASK [WMISalvage : Start previously stopped services]
+echo --------------------------------------------------------
 echo off
 net start vmms
 net start iphlpsvc
 net start winmgmt
+echo. && echo.
+
+echo TASK [WMISalvage : Verify winmgmt started]
+echo --------------------------------------------------------
+echo off
 sc query winmgmt
 pause
-cls
+echo. && echo.
 
-echo Building new repository...
+echo TASK [WMISalvage : Build new repository]
+echo --------------------------------------------------------
 echo.
 echo * This may take a while.
 echo.
@@ -43,9 +57,11 @@ wmic group
 wmic memorychip
 wmic nic
 wmic voltage
-pause
-cls
+echo. && echo.
 
+
+echo ========================================================
+echo.
 echo All set! Please reboot.
 echo.
 echo off
