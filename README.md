@@ -1,20 +1,20 @@
 # WNT Scripts
-Miscellaneous scripts for Windows management/deployment.
+Miscellaneous scripts for Windows management.
 
-## Script list:
-#### SafeSVC
-Script for secure Windows configuration and deployment. Disables unsafe services, features & tasks. Reduces telemetry, turns off *ContentDeliveryManager* and *ConsumerFeatures* and provides many miscellaneous tweaks. Can turn off *Ease of Use* – user dependent.
+#### WinSecOpt:
+Script for secure Windows configuration and optimization. Disables unsafe services & features, providing many miscellaneous tweaks as a bonus. Can turn off *Ease of Use* – user dependent.
 
-#### Duster
-Script offering a proper way of cleaning Windows. More info here: https://guide.mople71.cz/cs/wnt/duster.php
+#### Dusting:
+Automated temp files removal (manual & cleanmgr).
 
-#### WMISalvage
+#### WMISalvage:
 Completely rebuilds WMI repository. **WARNING: avoid unless you know what you're doing!**
 
-#### SFClog
-Initiates a System File Checker scan and creates a log of found errors for review. Usually used when remotely helping someone with system corruption.
+#### SFClog:
+Initiates a System File Checker scan and creates a log of found errors for review. Usually used when remotely helping with system corruption.
 
-#### DISMResetBase
-Cleans WinSxS folder and resets OS base by executing a simple command.
+#### DISMResetBase:
+Cleans WinSxS folder and resets OS base by executing a simple command. Uninstalling any prior OS updates becomes impossible.
+
 
 &#8230;and others
