@@ -27,11 +27,12 @@ echo [2] Windows 8.1
 echo.
 echo * Pick one of the options and press Enter.
 echo.
+:askversion
 echo off
-set /p op=Zvolte (1/2):
+set /p op=Select (1/2):
 if %op%==1 goto master
 if %op%==2 goto legacy
-goto error
+goto askversion
 
 
 :: ===============
@@ -160,7 +161,7 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\SQMClient\Windows" /v "CEIPEnable" /t 
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "AITEnable" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "DisableUAR" /t REG_DWORD /d 1 /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\AutoLogger\AutoLogger-Diagtrack-Listener" /v "Start" /t REG_DWORD /d 0 /f
-:: Disable 16-bit app supposrt (only for 32-bit OSs)
+:: Disable 16-bit app support (only for 32-bit OSs)
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "VDMDisallowed" /t REG_DWORD /d 1 /f
 :: Deny ICMP
 netsh firewall set icmpsetting type= All mode= Disable
@@ -177,11 +178,12 @@ echo * Keyboard shortcuts like 5x Shift etc. will no longer work.
 echo.
 echo [Y] Yes
 echo [N] No
+:askeou
 echo off
-set /p op=Zvolte (Y/N):
+set /p op=Select (Y/N):
 if %op%==Y goto eou
 if %op%==N goto end
-goto error
+goto askeou
 
 :eou
 cls
