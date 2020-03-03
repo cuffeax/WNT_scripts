@@ -27,11 +27,12 @@ echo [2] Windows 8.1
 echo.
 echo * Vyberte jednu z moznosti a stisknete Enter.
 echo.
+:askversion
 echo off
 set /p op=Zvolte (1/2):
 if %op%==1 goto master
 if %op%==2 goto legacy
-goto error
+goto askversion
 
 
 :: ===============
@@ -177,11 +178,12 @@ echo * Budou vypnuty klavesove zkratky jako 5x Shift apod.
 echo.
 echo [A] Ano
 echo [N] Ne
+:askeou
 echo off
 set /p op=Zvolte (A/N):
 if %op%==A goto eou
 if %op%==N goto end
-goto error
+goto askeou
 
 :eou
 cls
