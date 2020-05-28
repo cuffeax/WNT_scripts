@@ -2,6 +2,7 @@
 :: 2015-2020 mople71
 :: Licensed under The Unlicense | https://unlicense.org/UNLICENSE
 title Dusting
+color 1F
 
 :: User temp files
 del /s /f /q %TEMP%
