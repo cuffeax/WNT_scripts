@@ -1,35 +1,35 @@
 @echo off
-:: 2015-2020 mople71
+:: 2015-2020 cuffeax
 :: Licensed under The Unlicense | https://unlicense.org/UNLICENSE
-title WinSecOpt by mople71
+title WNTSec by cuffeax
 color 1F
 cls
 
 
 echo =========================================
-echo # WinSecOpt (former SafeSVC)
+echo # WNTSec (drive SafeSVC)
 echo =========================================
 echo.
-echo This script performs elementary (not only) security-wise OS optimization.
+echo Tento skript provede zakladni (nejen) bezpecnostni optimalizaci OS.
 echo.
-echo * Please close all apps.
+echo * Ukoncete prosim vsechny aplikace.
 echo. && echo.
 echo off
 pause
 cls
 
 echo --------------------------------------------------------------------------------
-echo ** Choose OS version:
+echo ** Zvolte verzi OS:
 echo --------------------------------------------------------------------------------
 echo.
 echo [1] Windows 10
 echo [2] Windows 8.1
 echo.
-echo * Pick one of the options and press Enter.
+echo * Vyberte jednu z moznosti a stisknete Enter.
 echo.
 :askversion
 echo off
-set /p op=Select (1/2):
+set /p op=Zvolte (1/2):
 if %op%==1 goto master
 if %op%==2 goto legacy
 goto askversion
@@ -41,7 +41,7 @@ goto askversion
 
 :master
 cls
-echo TASK [W10 : Optimize services]
+echo TASK [W10 : Optimalizuji sluzby]
 echo ----------------------------------------------
 echo off
 net stop WMPNetworkSvc
@@ -76,7 +76,7 @@ sc config TermService start= disabled
 sc config WinRM start= disabled
 sc config SysMain start= disabled
 sc config WMPNetworkSvc start= disabled
-:: DNS Cache service cannot be disabled the standard way
+:: DNS Cache nelze vypnout standardnim zpusobem
 reg add "HKLM\SYSTEM\ControlSet001\Services\Dnscache" /v "Start" /t REG_DWORD /d 4 /f
 sc config Fax start= disabled
 sc config lmhosts start= disabled
@@ -94,19 +94,19 @@ sc config RasAuto start= disabled
 sc config TapiSrv start= disabled
 sc config RetailDemo start= disabled
 sc config shpamsvc start= disabled
-:: Space for custom rules
+:: Volitelna optimalizace
 :: sc config WSearch start= demand
 cls
 
-echo TASK [W10 : Optimize configuration]
+echo TASK [W10 : Optimalizuji konfiguraci]
 echo ----------------------------------------------
 echo off
-:: Unneeded features
+:: Nepotrebne funkce
 reg add "HKLM\SOFTWARE\Microsoft\PolicyManager\default\WiFi\AllowWiFiHotSpotReporting" /v "Value" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Microsoft\PolicyManager\default\WiFi\AllowAutoConnectToWiFiSenseHotspots" /v "Value" /t REG_DWORD /d 0 /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "ContentDeliveryAllowed" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v "DisableWindowsConsumerFeatures" /t REG_DWORD /d 1 /f
-:: Telemetry
+:: Telemetrie
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "AllowTelemetry" /t REG_DWORD /d 0 /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\AutoLogger\SQMLogger" /v "Start" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-Application-Experience/Program-Telemetry" /v "Enabled" /t REG_DWORD /d 0 /f
@@ -116,12 +116,12 @@ PowerShell -Command "Set-MpPreference -SubmitSamplesConsent 1"
 
 
 :: ===================
-:: #  Common WNT
+:: #  Spolecna cast
 :: ===================
 
 :common
 cls
-echo TASK [WNT : Optimize Windows features]
+echo TASK [WNT : Optimalizuji funkce Windows]
 echo ----------------------------------------------
 echo off
 dism /online /Disable-Feature /FeatureName:FaxServicesClientPackage /norestart
@@ -135,7 +135,7 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v HiberbootEnabled /t REG_DWORD /d 0 /f
 cls
 
-echo TASK [WNT : Optimize Windows tasks]
+echo TASK [WNT : Optimalizuji ulohy Windows]
 echo ----------------------------------------------
 echo off
 schtasks /Change /TN "Microsoft\Windows\Autochk\Proxy" /Disable
@@ -149,11 +149,11 @@ schtasks /Change /TN "Microsoft\Windows\CloudExperienceHost\CreateObjectTask" /D
 schtasks /Change /TN "Microsoft\Windows\PI\Sqm-Tasks" /Disable
 cls
 
-echo TASK [WNT : Optimize Windows configuration]
+echo TASK [WNT : Optimalizuji nastaveni Windows]
 echo ----------------------------------------------
 echo off
 bitsadmin /reset /allusers
-:: Telemetry
+:: Telemetrie
 reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v "Enabled" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata" /v PreventDeviceMetadataFromNetwork /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v "AllowTelemetry" /t REG_DWORD /d 0 /f
@@ -161,33 +161,31 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\SQMClient\Windows" /v "CEIPEnable" /t 
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "AITEnable" /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "DisableUAR" /t REG_DWORD /d 1 /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\WMI\AutoLogger\AutoLogger-Diagtrack-Listener" /v "Start" /t REG_DWORD /d 0 /f
-:: Disable 16-bit app support (only for 32-bit OSs)
+:: Podpora 16-bit aplikaci (na 32-bit OS)
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "VDMDisallowed" /t REG_DWORD /d 1 /f
-:: Deny ICMP
-netsh firewall set icmpsetting type= All mode= Disable
 cls
 
 
 echo --------------------------------------------------------------------------------
-echo ** Would you like to turn off Ease of Use?
+echo ** Prejete si zakazat Usnadneni pristupu?
 echo --------------------------------------------------------------------------------
 echo.
-echo * Execution on logon screen will be restricted.
+echo * Bude zakazano spusteni na prihlasovaci obrazovce.
 echo.
-echo * Keyboard shortcuts like 5x Shift etc. will no longer work.
+echo * Budou vypnuty klavesove zkratky jako 5x Shift apod.
 echo.
-echo [Y] Yes
-echo [N] No
+echo [A] Ano
+echo [N] Ne
 :askeou
 echo off
-set /p op=Select (Y/N):
-if %op%==Y goto eou
+set /p op=Zvolte (A/N):
+if %op%==A goto eou
 if %op%==N goto end
 goto askeou
 
 :eou
 cls
-echo TASK [WNT : Turning off Ease of Use]
+echo TASK [WNT : Vypinam Usnadneni pristupu]
 echo ----------------------------------------------
 echo off
 reg add "HKCU\Control Panel\Accessibility\StickyKeys" /v "Flags" /t REG_SZ /d "506" /f
@@ -198,9 +196,9 @@ icacls %systemroot%\System32\utilman.exe /deny Everyone:(x)
 
 :end
 cls
-echo All set!
+echo Hotovo!
 echo.
-echo * Reboot is required... Shall we?
+echo * Je potreba restartovat OS... Muzeme?
 echo. && echo.
 echo off
 pause
@@ -214,7 +212,7 @@ exit /b
 
 :legacy
 cls
-echo TASK [W8.1 : Optimize services]
+echo TASK [W8.1 : Optimalizuji sluzby]
 echo ----------------------------------------------
 echo off
 net stop WMPNetworkSvc
@@ -235,18 +233,17 @@ sc config WinRM start= disabled
 sc config WMPNetworkSvc start= disabled
 sc config Dnscache start= disabled
 sc config Fax start= disabled
-:: Space for custom rules
+:: Volitelna optimalizace
 :: sc config HomeGroupListener start= disabled
 :: sc config HomeGroupProvider start= disabled
 :: sc config WSearch start= demand
 cls
 
-echo TASK [W8.1 : Optimize configuration]
+echo TASK [W8.1 : Optimalizuji konfiguraci]
 echo ----------------------------------------------
 echo off
 :: Windows Defender
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender\MpEngine" /v "MpEnablePus" /t REG_DWORD /d 1 /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\MRT" /v DontOfferThroughWUAU /t REG_DWORD /d 1 /f
 
-:: Common WNT part
+:: Spolecna WNT cast
 goto common
